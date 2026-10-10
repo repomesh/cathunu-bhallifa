@@ -1,101 +1,110 @@
 {
-    // Latex workshop
-    "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/悟数学",
-    "latex-workshop.latex.tools": [
-          {
-            "name": "xelatex2023",
-            "command": "C:/texlive/2023/bin/windows/xelatex.exe",
-            "args": [
-              "-synctex=1",
-              "-interaction=nonstopmode",
-              "-file-line-error",
-              "-shell-escape",
-              "--output-directory=%OUTDIR%",
-              "--verbose",
-              "%DOC%"
-            ]
-          },
-          {
-            "name": "latexmk2023",
-            "command": "C:/texlive/2023/bin/windows/latexmk.exe",
-            "args": [
-              "-synctex=1",
-              "-interaction=nonstopmode",
-              "-file-line-error",
-              "-pdf",
-              "-outdir=%OUTDIR%",
-              "--verbose",
-              "%DOC%"
-            ]
-          },         
-          {
-            "name": "pdflatex",
-            "command": "pdflatex",
-            "args": [
+  // Latex workshop
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/悟数学",
+  "latex-workshop.latex.tools": [
+        {
+          "name": "xelatex2023",
+          "command": "C:/texlive/2023/bin/windows/xelatex.exe",
+          "args": [
             "-synctex=1",
             "-interaction=nonstopmode",
             "-file-line-error",
+            "-shell-escape",
+            "--output-directory=%OUTDIR%",
+            "--verbose",
             "%DOC%"
-            ]
-          },
-          {
-            "name": "bibtex",
-            "command": "bibtex",
-            "args": [
-            "%DOCFILE%"
-            ]
-          }
-        ],
-    "latex-workshop.latex.recipes": [
-          {
-            "name": "xelatex2023",
-            "tools": [
-            "xelatex2023"
-            ]
-          },
-          {
-            "name": "latexmk2023",
-            "tools": [
-            "latexmk2023"
-            ]
-          },
-
-          {
-            "name": "pdflatex -> bibtex -> pdflatex*2",
-            "tools": [
-            "pdflatex",
-            "bibtex",
-            "pdflatex",
-            "pdflatex"
-            ]
-          }
-        ],
-    // "latex-workshop.view.pdf.viewer": "tab",  
-    "latex-workshop.latex.clean.fileTypes": [
-        "*.aux",
-        "*.bbl",
-        "*.blg",
-        "*.idx",
-        "*.ind",
-        "*.lof",
-        "*.lot",
-        "*.out",
-        "*.toc",
-        "*.acn",
-        "*.acr",
-        "*.alg",
-        "*.glg",
-        "*.glo",
-        "*.gls",
-        "*.ist",
-        "*.fls",
-        "*.log",
-        "*.fdb_latexmk"
+          ]
+        },
+        {
+          "name": "latexmk2023",
+          "command": "C:/texlive/2023/bin/windows/latexmk.exe",
+          "args": [
+            "-synctex=1",
+            "-interaction=nonstopmode",
+            "-file-line-error",
+            "-pdf",
+            "-outdir=%OUTDIR%",
+            "--verbose",
+            "%DOC%"
+          ]
+        },         
+        {
+          "name": "pdflatex",
+          "command": "pdflatex",
+          "args": [
+          "-synctex=1",
+          "-interaction=nonstopmode",
+          "-file-line-error",
+          "%DOC%"
+          ]
+        },
+        {
+          "name": "bibtex",
+          "command": "bibtex",
+          "args": [
+          "%DOCFILE%"
+          ]
+        }
       ],
-      "git.ignoreWindowsGit27Warning": true,
-      "workbench.editor.enablePreview": true,
-    "git.autofetch": true,
-    "window.zoomLevel": -1,
-    "explorer.confirmDelete": false,
-    "jupyter.interactiveWindow.textEditor.executeSelection": true
+  "latex-workshop.latex.recipes": [
+        {
+          "name": "xelatex2023",
+          "tools": [
+          "xelatex2023"
+          ]
+        },
+        {
+          "name": "latexmk2023",
+          "tools": [
+          "latexmk2023"
+          ]
+        },
+
+        {
+          "name": "pdflatex -> bibtex -> pdflatex*2",
+          "tools": [
+          "pdflatex",
+          "bibtex",
+          "pdflatex",
+          "pdflatex"
+          ]
+        }
+      ],
+  // "latex-workshop.view.pdf.viewer": "tab",  
+  "latex-workshop.latex.clean.fileTypes": [
+      "*.aux",
+      "*.bbl",
+      "*.blg",
+      "*.idx",
+      "*.ind",
+      "*.lof",
+      "*.lot",
+      "*.out",
+      "*.toc",
+      "*.acn",
+      "*.acr",
+      "*.alg",
+      "*.glg",
+      "*.glo",
+      "*.gls",
+      "*.ist",
+      "*.fls",
+      "*.log",
+      "*.fdb_latexmk"
+    ],
+    "git.ignoreWindowsGit27Warning": true,
+    "workbench.editor.enablePreview": true,
+  "git.autofetch": true,
+  "window.zoomLevel": -1,
+  "explorer.confirmDelete": false,
+  "jupyter.interactiveWindow.textEditor.executeSelection": true,
+  "latex-workshop.view.pdf.viewer": "external",
+  "latex-workshop.view.pdf.external.viewer.command": "C:/Users/snorr/AppData/Local/SumatraPDF/SumatraPDF.exe",
+  "latex-workshop.view.pdf.external.viewer.args": [
+        "-forward-search", "%TEX%", "%LINE%",
+        "-reuse-instance",      // 复用已打开的 SumatraPDF 窗口
+        "-inverse-search",      // 启用反向搜索（在 PDF 中双击跳转回 VSCode）
+        "\"D:\\Softwares\\Microsoft VS Code\\Code.exe\" \"D:\\Softwares\\Microsoft VS Code\\resources\\app\\out\\cli.js\" --ms-enable-electron-run-as-node -r -g \"%f:%l\"",
+        "%PDF%"
+    ]
 }

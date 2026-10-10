@@ -1,0 +1,749 @@
+\documentclass[12pt,UTF8,fontset=none]{ctexbook}
+
+% 导入设定
+\input{../shared/settings_test}
+\input{../shared/settings-alg}
+\usepackage{xpinyin}
+
+% 封面
+% --- 定义作者和书名的变量 ---
+\newcommand{\mytitle}{抽象代数}
+\newcommand{\myauthor}{大青花鱼}
+% 正文
+\begin{document}
+% ========== 扉页 ==========
+\cleardoublepage                % 确保从右页（奇数页）开始
+\thispagestyle{empty}           % 本页无页码无页眉
+\begin{center}
+    \vspace*{2cm}               % 顶部留白
+    
+    % 书名
+    {\zihao{0} \bfseries \mytitle}
+    
+    \vspace{1cm}              % 书名与作者间距
+    
+    % 作者名
+    {\zihao{2} \texttt{\myauthor}}
+    
+    \vfill                      % 将后续所有内容推至页面底部
+    
+    % --- 分隔线 ---
+    \rule{0.5\textwidth}{0.4pt} \\[0.5cm]
+    
+    % --- 版权声明 ---
+    {\scriptsize
+    \copyright\ \the\year{} \texttt{\myauthor} \\[0.2cm]
+    本作品采用 知识共享署名-相同方式共享 4.0 国际许可协议（CC BY-SA 4.0）进行许可。\\
+    协议全文详见：https://creativecommons.org/licenses/by-sa/4.0/ \\
+    您可以自由地共享、修改本作品，但须遵守“署名”和“相同方式共享”的条件。
+    }
+\end{center}
+\newpage   
+% ========== 扉页结束 ==========
+
+\tableofcontents
+\newpage
+
+\chapter{对称与群}
+
+\section{群的定义}
+
+\begin{df}[\textbf{二元运算}]
+    给定集合$S$。如果映射$\phi$总把$S$中两个元素映射为$S$中一个元素，就说$\phi$是$S$上的\textbf{二元运算}。
+\end{df}
+
+\begin{df}
+    集合$S$上的二元运算$\phi$可以有以下性质：
+    \begin{itemize}
+        \item \textbf{结合律}：若$\forall\; a, b, c\, \in\, S$，$\phi(\phi(a,b),c) = \phi(a,\phi(b,c))$，就说$\phi$满足结合律。
+        \item \textbf{交换律}：若$\forall\; a, b\, \in\, S$，都有$\phi(a,b) = \phi(b,a)$，就说$\phi$满足交换律。
+        \item \textbf{互反律}：若$\forall\; a, b\, \in\, S$，总能找到$x, y\, \in S$，使得$\phi(a, x) = \phi(y, a) = b$，就说$\phi$满足互反律。
+        \item \textbf{幺元}：若有$e\in S$使得：$\forall\; x\in S$，$\phi(e,x) = x$，就说$\phi$有左幺元$e$。同理，若有$e\in S$使得：$\forall\; x\in S$，$\phi(x,e) = x$，就说$\phi$有右幺元$e$。
+    \end{itemize}
+\end{df}
+
+\begin{tm}[\textbf{幺元定理}]\label{tm:g-10}
+    若集合$S$上的二元运算$\phi$有左右幺元，则左右幺元相等，称为\textbf{幺元}。幺元也称为\textbf{空元}。
+\end{tm}
+\begin{proof}
+    记左幺元为$a$，右幺元为$b$，则按定义：
+    $$ a = \phi(a,b) = b. $$ 
+\end{proof}
+
+\begin{df}[\textbf{巛互幺}]
+    配备了二元运算$\phi$的集合$S$，称为\textbf{厶}。如果$\ast$满足结合律，就称其为\textbf{川}或\textbf{巛}\footnote{“巛”是“川”的异体字。“川”和“巛”同音同义。为了减少歧义，优先使用“巛”。}；如果$\phi$满足互反律，就称其为\textbf{互}；如果集合关于$\phi$有幺元，就称为\textbf{幺}。
+\end{df}
+
+\begin{tm}[\textbf{幺元唯一定理}]\label{tm:g-20}
+    若集合$S$关于二元运算$\phi$有幺元，则幺元唯一。
+\end{tm}
+\begin{proof}
+    若$a,b\in S$都是关于二元运算$\phi$的幺元，则：
+    $$ a = \phi(a,b) = b. $$ 
+\end{proof}
+
+\begin{tm}[\textbf{巛互生幺定理}]\label{tm:g-30}
+    若集合$S$上的二元运算$\phi$既满足互反律又满足结合律，那么$S$关于$\phi$有幺元。也叫\textbf{反合生幺定理}。
+\end{tm}
+\begin{proof}
+    任选$x\in S$。由于$\phi$满足互反律，可以找到$e_x\in S$，使得$\phi(e_x,x) = x$。而$\forall\; S\ni y\neq x$，可以找到$b\in S$，使得$\phi(x, b) = y$。于是按照结合律：
+    $$ \phi(e_x, y) = \phi(e_x, \phi(x, b)) = \phi(\phi(e_x, x), b) = \phi(x, b) = y.$$
+    这说明$e_x$满足：
+    $$ \forall \; y\, \in \, S, \quad \phi(e_x, y) = y.$$
+    因此$e_x$是$S$上$\phi$的左幺元。
+
+    同理可以找到$S$上$\phi$的右幺元。于是根据幺元定理，左右幺元相等，是为$S$关于$\phi$的幺元。
+\end{proof}
+
+\begin{df}[\textbf{群}]
+    配备了满足结合律、互反律且有幺元的二元运算$\phi$的集合$S$称为\textbf{群}，记为$(S,\phi)$。如果$\phi$还满足交换律，就称$(S,\phi)$为\textbf{交换群}。
+\end{df}
+
+\begin{ex}
+    可以验证：整数集关于整数加法成群。非零有理数集关于整数乘法成群。模$n$同余类关于加法成群。模$p$（素数）同余类关于乘法成群。
+\end{ex}
+
+\begin{ex}
+    可以验证：集合$S$到自身的所有双射关于映射的复合构成群，称为$S$的\textbf{对称群}，也称为\textbf{全置换群}（到自身的双射也可以理解为置换），记为$\mathfrak{S}(S)$。
+\end{ex}
+
+为了方便表述，我们通常用$G$表示一个群的元素集合，用乘法符号$\cdot$代表其二元运算。于是群一般写作$(G,\cdot)$，简写为$G$。我们可能会把$\cdot$称为“群的乘法”，甚至会和乘法一样，把$x\cdot y$简写为$xy$。注意：这不说明其运算$\cdot$就是乘法。
+
+我们约定一般用$e$表示群的幺元。
+
+\begin{tm}[\textbf{方等为幺元}]\label{tm:g-40}
+    若群$(G,\cdot)$的元素$x$满足$xx = x$，则$x$是群的幺元$e$。
+\end{tm}
+\begin{proof}
+    按照互反律，有$y\in G$使得$yx = e$。于是
+    $$ x = ex = (yx)x = y(xx) = yx = e. $$
+\end{proof}
+
+\begin{tm}[\textbf{逆元定理}]\label{tm:g-50}
+    群$(G,\cdot)$的任何元素$x$总有逆元，即有唯一的$y\in G$满足
+    $$x\cdot y = e = y\cdot x.$$
+    我们称$y$是$x$的\textbf{逆元}，一般记为$x^{-1}$。
+\end{tm}
+\begin{proof}
+    根据互反律，可知有$y, z\in G$使得$xy = e = zx$。根据结合律：
+    $$ y = ey = (zx)y = z(xy) = ze = z.$$
+    于是$y = z$称为$x$的逆元。另外，若有$w$也是$x$的逆元，则：
+    $$ y = ey = (wx)y = w(xy) = we = w.$$
+    这说明逆元唯一。
+\end{proof}
+
+注意到逆元的定义$xx^{-1} = x^{-1}x = e$就蕴含了基本性质：
+\begin{tm}
+    群$(G,\cdot)$的任何元素$x$的逆元的逆元是$x$自身。
+    $$
+    \left(x^{-1}\right)^{-1} = x. 
+    $$
+\end{tm}
+
+为了方便记忆，我们有如下口诀：
+
+\vspace{16pt}
+\noindent{\Large 取二得一曰\xpinyin{厶}{mou3}，可反曰\xpinyin*{互}，可合曰\xpinyin*{巛}，不易曰幺。}
+
+\noindent{\Large 幺互曰\xpinyin*{囜}，幺巛曰\xpinyin*{屮}，反合生幺，\xpinyin*{互巛}生群。}
+
+\vspace{16pt}
+\begin{df}[\textbf{子群}]
+    群$(G,\cdot)$的非空子集$H$如果对$\cdot$封闭，并且是关于$\cdot$的群，就称$H$是$G$的\textbf{子群}，记为$H\leq G$。如果$H\neq G$，就说$H$是$G$的\textbf{真子群}。
+\end{df}
+具体来说，我们要让$H$上的二元运算$\cdot$满足结合律、互反律并含幺元。不过，经验证可以发现，由于$H$是$G$的子集，结合律总成立。所以实际上非空子集$H$成为子群的条件是：
+\begin{tm}[\textbf{子群的判定}] \label{tm:g-60}  
+    群$(G,\cdot)$的非空子集$H$只要满足以下条件，就是$G$的子群：
+    \begin{itemize}
+        \item 封闭性：$\forall\;a,b\,\in\, H$，$ab \,\in\, H$。
+        \item 互反律：$\forall\;a,b\,\in\, H$，都能找到$x,y\,\in\,H$，使得$xa = ay = b$。
+    \end{itemize}
+\end{tm}
+
+\begin{proof}
+    封闭性保证$\cdot$是$H$上的二元运算。于是根据巛互生幺定理，$H$关于运算$\cdot$有幺元$e_H$。按照定义，$e_He_H = e_H$。因此按照定理\ref{tm:g-40}，$e_H = e_G$：子群的幺元就是群的幺元。
+\end{proof}
+
+显然群$G$的幺元构成的单元集$\{e\}$必定是群的子群。我们称其为\textbf{平凡子群}。
+
+子群$H$的元素满足互反律，因此按照定理\ref{tm:g-50}，其中的元素也有唯一逆元。而这个逆元就是它在$G$中的逆元。
+\begin{proof}
+    记$a\in H$在$H, G$中的逆元分别是$n_H,n_G$，则
+    $$ n_H = e\cdot n_H = (n_G\cdot a)\cdot n_H = n_G\cdot (a\cdot n_H) = n_G\cdot e = n_G.$$
+\end{proof}
+
+使用逆元的概念，我们还有更简便的判定子群的方法：
+\begin{tm}[\textbf{子群的判定}] \label{tm:g-70}   
+    设$H$是群$(G,\cdot)$的非空子集。如果$\forall\;a,b\,\in\, H$，$a^{-1}b\,\in\,H$，$H$就是$G$的子群。其中$a^{-1}$是$a$在$G$中的逆元。
+\end{tm}
+\begin{proof}
+    $\forall \; h\,\in\,H$，依照条件，$e_G = h^{-1}h \,\in\, H$；其次，$h^{-1} = h^{-1}e_G\in H$。
+    
+    首先$\forall\;a,b\,\in\, H$，$a^{-1}\,\in\, H$。因此
+    $$ ab = \left(a^{-1}\right)^{-1}b\, \in\, H. $$
+    于是$H$对群的乘法封闭。
+
+    其次，只要$a,b\,\in\, H$，就有$a^{-1}, b^{-1}\,\in\, H$。因此
+    $$ba^{-1} = \left(b^{-1}\right)^{-1}a^{-1}\,\in\, H.$$
+    于是互反律成立：
+    $$ \forall \; a,b\,\in\,H, \;\;\mbox{有}\;ba^{-1},\,a^{-1}b\,\in\,H,\;\;\mbox{使得}\quad (ba^{-1})a = a(a^{-1}b) = b. $$
+    故根据\ref{tm:g-60}判定$H$为子群。
+\end{proof}
+
+\begin{tm}\label{tm:g-80}  
+    定义群$G$的子集$S$关于$a\in G$的\textbf{往复集}为：
+    $$ aSa^{-1} = \{axa^{-1}\,\mid\,x\in S\}.$$
+    如果$H$是$G$的子群，那么它关于群中任何元素$a$的往复集总是子群，称为$H$关于$a$的\textbf{往复群}。
+\end{tm}
+\begin{proof}
+    $\forall \; a\in G$，考察$H$关于$a$的往复集$aHa^{-1}$中任两个元素：$ah_1a^{-1}$，$ah_2a^{-1}$。$ah_1a^{-1}$的逆元为$ah_1^{-1}a^{-1}$，所以
+    $$ (ah_1a^{-1})^{-1} (ah_2a^{-1}) = ah_1^{-1}a^{-1}ah_2a^{-1} = ah_1^{-1}h_2a^{-1} = a(h_1^{-1}h_2)a^{-1} \in aHa^{-1}. $$
+    因此根据定理\ref{tm:g-70}，$aHa^{-1}$是子群。
+\end{proof}
+
+\begin{pp}\label{pp:g-50}
+    子群的非空交集仍然是子群。
+\end{pp}
+\begin{proof}
+    设$I$是某个非空指标集，群$G(,\cdot)$的某些子群可以用$I$来下标。考虑集合：
+    $$ H = \bigcap_{i\in I}H_i, \;\;\mbox{其中} \forall\;i\,\in\, I,\;\; H_i\leq G.$$
+    如果$H$不是空集，要证明$H\leq G$。
+
+    $\forall\;a,b\,\in\,H$，按定义，$\forall\;i\,\in\, I$，$a,b\in H_i$，于是$a^{-1}b\in H_i$。故$a^{-1}b\in H$。因此根据定理\ref{tm:g-70}，$H$是子群。
+\end{proof}
+
+\subsection{循环群}
+
+群$(G,\cdot)$的子集不一定是子群，但我们可以考虑它所在的“最小”子群。具体来说，设有非空集合$X\subset G$，考虑$G$所有包含$X$的子群（即$X$为其子集）。这些子群的交集仍然包含$X$，因此非空集。根据结论\ref{pp:g-50}，它是$G$的子群。我们把这个子群称为$X$（在$G$中）\textbf{生成}的子群，记为$\langle X\rangle$。要注意不同的集合可能生成相同的子群。
+
+由有限集生成的子群称为\textbf{有限生成子群}。由单个元素（单元集）生成的子群称为\textbf{单生群}或\textbf{循环群}。我们把$\{a\}$生成的循环群简称为由$a$生成的循环群，记为$\langle a\rangle$。
+
+生成群长什么样子呢？我们有以下结论：
+\begin{tm}[\textbf{描述生成群}]
+    非空集合$X\subset G$生成的子群由所有$X$中有限个元素生成的“单项式”组成：
+    $$ \langle X\rangle = \left\{a_1^{n_1}a_2^{n_2}\cdots a_k^{n_k}\,\big|\,k\in \mathbb{Z}^+,\; n_1,\cdots, n_k\in\mathbb{Z},\;a_1,\cdots,a_k\in G\right\}. $$
+\end{tm}
+\begin{proof}
+    记$P$为以上提到的所有“单项式”的集合。首先，它们显然是$G$中元素。给定$P$中两元素$x,y$，为了好说话，重新标记它们的样子：考虑两元素合共“涉及”的$X$中元素，求其并集，记为$a_1,\cdots, a_k$，其乘方分别是$n_1,\cdots,n_k$和$m_1,\cdots,m_k$，即
+    $$ x = a_1^{n_1}a_2^{n_2}\cdots a_k^{n_k},\quad y = a_1^{m_1}a_2^{m_2}\cdots a_k^{m_k}. $$
+    于是
+    $$ x^{-1}y = a_1^{-n_1+m_1}a_2^{-n_2+m_2}\cdots a_k^{-n_k+m_k}\in P. $$
+    于是根据定理\ref{tm:g-70}，$P$是$G$的子群。按定义$\langle X\rangle \subseteq P$。
+
+    其次，若$H\leq G$包含$X$，则$P$中这些由$X$中有限个元素生成的“单项式”显然属于$H$。因此$P\subseteq H$，从而也是所有$X\subseteq H\leq G$的子群$H$的交集的子集。这就说明$P\subseteq \langle X\rangle$。
+
+    综上可知$P = \langle X\rangle$。
+\end{proof}
+
+作为特例，循环群由单元集$\{a\}$生成，那么它的元素就是形如$a^n$（$n\in\mathbb{Z}$）的乘方项：
+$$ \langle a\rangle = \{a^n \, \mid \, n\in\mathbb{Z}\}. $$
+
+循环群是我们能想到的最简单的子群。从群里找一个元素，不断地乘以自己或自己的逆，得到的集合就是它生成的循环群。我们不难想象两种情况：
+\begin{enumerate}[label=\arabic*.]
+    \item $\forall \; n\in \mathbb{Z}$，随着$n$不断增大，我们得到的$a^n$、$a^{-n}$总和之前的不一样。这时的循环群有无限个元素。
+    \item $n$增大到某个数时，发现$a^n$或$a^{-n}$和之前的某个元素一样。
+\end{enumerate}
+先来讨论后一种情况，这说明我们找到两个整数$m_1,m_2$，使得$a^{m_1} = a^{m_2}$。不妨设$m_1>m_2$，则$a^{m_1-m_2} = a^{m_1}a^{-m_2} = a^{m_1}\left(a^{m_2}\right)^{-1} = e$。记$m = m_1 - m_2$，则
+$$ a^m = e. $$
+对任何整数$n$，对$m$做带余除法，就有$a^n = a^{qm+r} = a^r$，其中$q,r$是整数带余除法的结果，$0\leqslant r < m$。于是$e, a, a^2, \cdots, a^n, \cdots$这无穷多项里面，从$a^m$开始，都在循环重复前面$m$项：
+$$ e, a, a^2, \cdots, a^{m-1}.$$
+这也是“循环群”名称的由来。至于$n<0$的情形，从$ a^m = e$可知$a^{m-1} = a^{-1}$，$a^{m-2} = a^{-2}$等等，所以$a^{-n}$形式的项其实也是以上$m$项之一\footnote{这其实是前面整数带余除法的结论，只不过对负数情形再次说明。}。总之，$a$生成的群变成了$m$元群：
+$$ \langle a\rangle = \left\{ e, a, a^2, \cdots, a^{m-1} \right\}. $$
+其他情形如何呢？我们在后面继续探讨。
+
+\subsection{群同态}
+
+群的同态是保持群的运算的映射。
+\begin{df}[\textbf{群的同态和同构}]
+    给定两群$(G_1, \phi_1)$和$(G_2, \phi_2)$。如果映射：
+    $$ \psi \;:\; G_1 \; \longrightarrow \; G_2$$
+    保持群的运算：
+    $$ \forall \; a, b\, \in \, G_1, \quad \psi(\phi_1(a,b)) = \phi_2(\psi(a), \psi(b)), $$
+    就说$\psi$是群$G_1$到$G_2$的\textbf{同态}，简称\textbf{群同态}。若同态$\psi$是单映射，就称为\textbf{单同态}；若是满映射，就称为\textbf{满同态}。若$\psi$是双射，就说它是群$G_1$到$G_2$的\textbf{同构}，简称\textbf{群同构}。群到自身的同态称为\textbf{自同态}，到自身的同构称为\textbf{自同构}。
+\end{df}
+根据映射的基本性质，$G_1$到$G_2$的单同态$\psi$就是$G_1$到它的像$\psi(G_1)$的同构。
+
+\begin{tm}
+    群同态必然把$G_1$的幺元$e_1$映射到$G_2$的幺元$e_2$。
+\end{tm}
+\begin{proof}
+\begin{align*}
+    \phi_2(\psi(e_1),\psi(e_1)) = \psi(\phi_1(e_1, e_1)) = \psi(e_1).
+\end{align*}
+所以按照定理\ref{tm:g-40}，$\psi(e_1)$就是$G_2$的幺元。
+\end{proof}
+
+群同态保持群的运算，因此，逆元经过同态还是逆元：
+\begin{align*}
+    \forall \; a\, \in \, G_1, \quad \phi_2(\psi(a^{-1}), \psi(a)) = \psi(\phi_1(a^{-1}, a)) = \psi(e_1) = e_2, \\
+    \phi_2(\psi(a), \psi(a^{-1})) = \psi(\phi_1(a, a^{-1})) = \psi(e_1) = e_2.
+\end{align*}
+也就是说，$\psi(a)^{-1} = \psi(a^{-1})$。
+
+\begin{tm}[\textbf{置换群定理}]
+    每个群都同构于某个对称群的子群。
+\end{tm}
+\begin{proof}    
+    设有群$(G,\cdot)$，给定$g\in G$，考虑映射：
+    \begin{align*}
+        \overrightarrow{g}\;: \; G \; &\longrightarrow \; G \\
+    x \;&\longmapsto \;gx
+    \end{align*}
+    由逆元定理可知，$\overrightarrow{g}$是双射，是$G$上的置换，因此是由$G$上的置换构成的对称群$\mathfrak{S}(G)$的元素。考虑映射：
+    \begin{align*}
+        L: \; G  \; &\longrightarrow \; \mathfrak{S}(G) \\
+        g \;&\longmapsto \;\overrightarrow{g}
+    \end{align*}
+    可以验证$L$是群同态，而且是单同态（$L(g)$是恒等映射说明$g = e$），即$\Ker L = \{e\}$。因此$G$同构于$\Img L$，也就是$\mathfrak{S}(G)$的子群。
+\end{proof}
+
+\begin{df}[\textbf{群同态的核}]
+    设有群$(G_1, \phi_1)$和$(G_2, \phi_2)$以及$G_1$到$G_2$的同态$\psi$，则集合
+    $$\;\{g\in G_1\, \mid \, \psi(g) = e_2\}$$
+    称为群同态$\psi$的\textbf{核}，记为$\Ker \psi$。其中$e_2\in G_2$是$(G_2, \phi_2)$的幺元。
+\end{df}
+群同态的核是出发群的子集，可以证明它是群，因此是子群。
+\begin{tm}[\textbf{群同态的核是子群}]
+    设有群$(G_1, \phi_1)$和$(G_2, \phi_2)$以及$G_1$到$G_2$的同态$\psi$，则$\Ker \psi\leq G_1$。
+\end{tm}
+\begin{proof}
+    $\forall \;a,b\,\in\,\Ker \psi$，按定义：
+    $$
+    \psi(a) = \psi(b) = e_2.
+    $$
+    于是
+    $$
+        \psi(\phi_1(a^{-1},b)) = \phi_2(\psi(a^{-1}),\psi(b)) = \phi_2(\psi(a)^{-1},\psi(b)) = \phi_2(e_2^{-1}, e_2) = e_2.
+    $$
+    这说明$\phi_1(a^{-1},b)\in \Ker \psi$。因此按照定理\ref{tm:g-70}，$\Ker \psi$是$G_1$的子群。
+\end{proof}
+
+书写以上内容时，我们使用了$\phi_1, \phi_2$来指明两个群中的运算。以后为了方便，我们会用$\cdot$表示所有的群的运算，而不再刻意区分。读者须自行分辨群的乘法属于哪个群。
+
+继续探讨循环群。我们很容易想到群同态：
+\begin{align*}
+    f \;:\;\; \mathbb{Z} \; &\longrightarrow \; \langle a\rangle \\
+    n \; &\longmapsto \; a^n
+\end{align*}
+根据之前的结论，群同态$f$是满同态（$\langle a\rangle$没有别的形式的元素了）。如果$f$也是单同态，就成为群同构。这说明$\langle a\rangle$作为群和$\mathbb{Z}$的性质一模一样，可以当作$\mathbb{Z}$来看待。
+
+如果$f$不是单同态，那么它的核$\Ker f$是一个群，是$\mathbb{Z}$的子群。由于$f$不是单同态，$\Ker f$至少包含一个非零元素。而根据$f$定义，如果$0\neq n\in\Ker f$，则
+$$ a^n = e. $$
+于是$a^{-n} = \left(a^n\right)^{-1} = e$。即$-n\in\Ker f$。这说明$\Ker f$中必有正整数。根据整数集合的性质，$\Ker f$中有最小的正整数$m$。$\forall \; n\in\Ker f$，考虑整数的带余除法：
+$$ n = mq + r.$$
+其中$m\in\mathbb{Z}$，$0\leqslant r < m$。则：
+$$ e = a^n = a^{mq+r} = a^r.$$
+因此$r\in\Ker f$。但$m$是$\Ker f$中最小正整数，所以$r = 0$。这说明$\Ker f$中所有元素都是$m$的倍数。
+$$ \Ker f = \{km \, \mid \, k\in\mathbb{Z}\} = m\mathbb{Z}. $$
+而这时循环群为：
+$$ \langle a\rangle = \left\{ e, a, a^2, \cdots, a^{m-1} \right\}. $$
+
+\section{往复和往合}
+
+设有群$(G,\cdot)$。$G$的元素$x$与其子集$H$中元素左乘得到的集合称为$H$的\textbf{左往集}：
+$$ aH = \{ ah \, \mid \, h\in H \}$$
+同理，$x$与子集$H$中元素右乘得到的集合称为$H$的\textbf{右往集}：
+$$ Ha = \{ ha \, \mid \, h\in H \}$$
+子群的往集一般不是群。所有往集的集合称为用$H$除$G$的\textbf{商集}。
+$$ H^{\text{左}} \, = \, \{aH \, \mid \, a \in G \}, \quad H^{\text{右}} \, = \, \{Ha \, \mid \, a \in G \}$$
+任两个左往集$aH, bH$之间有双射：
+\begin{align*}
+    aH \; &\longrightarrow \; bH \\
+    ah \; &\longmapsto \; bh
+\end{align*}
+因此两两等势。右往集也如此。由于$H$的左往集和右往集都和$H$等势，所以$H$的左往集和右往集相互也等势。
+
+如果$H$是$G$的子群，那么对群中任两个元素$a,b$，可以验证，“$\exists \;h\in H$，使得$ah = b$”是等价关系，称为\textbf{合同关系}。
+\begin{proof}
+    逐个验证等价关系的条件。
+    
+    自反性：$\forall \; a\in G$，有$e\in H$使得$ae = a$。
+
+    对称性：$\forall \; a,b\,\in\, G$，若有$h\in H$使得$ah = b$，则$h^{-1}\in H$使得
+    $$bh^{-1} = ahh^{-1} = a.$$
+
+    传递性：$\forall \; a,b,c\,\in\, G$，若有$h_1,h_2\in H$使得$ah_1 = b,\;bh_2 = c$，则$h_1h_2\in H$使得$ah_1h_2 = bh_2 = c$。
+\end{proof}
+
+这个等价关系也可以解释为“属于同一左往集”。因为$b\in aH$就是说$\exists \; h\in H$使得$ah = b$。我们说$H$除$G$的左商集构成$G$的等价类（称为\textbf{同往类}）。类似地，$H$除$G$的右商集也构成$G$的等价类。
+
+考察$H$的两个左往集：$aH$和$bH$，如果它们有共同元素，即有$h_1, h_2\,\in\, H$使得$ah_1 = bh_2$，那么$a = bh_2h_1^{-1} \in bH$，于是$aH\subseteq bH$。同理也有$bH \subseteq aH$。于是$aH = bH$。也就是说，$H$的任何两个左往集要么是同一个集合，要么不相交。而$H$的所有左往集的并集显然覆盖$G$。因此$G$是$H$的一个个两两不相交的左往集的并集，称为$G$的分划。类似地，$H$的右往集也构成$G$的分划。
+
+直观来说，$H$的左往集构成了和$H$“同等大小”的一个个“副本”。这些副本两两不相交，把整个群$G$分割成“同等大小”的“块”。既不重叠，也不遗漏。$H$的右往集也做同样的事情。要注意的是，往左和往右，两种分划的效果几乎一样，但并不是同一个分划。我们不能保证$H$的左往集就一定是某个右往集（虽然两者“同等大小”），反之也是如此。
+
+再分析$H^{\text{左}}$和$H^{\text{右}}$的关系。考虑映射：
+\begin{align*}
+    f \;\; : \; H^{\text{左}}\; &\longrightarrow \; H^{\text{右}} \\
+    aH \; & \longmapsto \; Ha^{-1}.
+\end{align*}
+这个映射是自洽的。如果$aH = bH$，那么有$h\in H$使得$b = ah$，于是$b^{-1} = h^{-1}a^{-1}\in Ha^{-1}$，这说明$Hb^{-1} = Ha^{-1}$。其次，$Ha = f(a^{-1}H)$，所以$f$是满射。最后，$Ha{-1} = Hb^{-1}$说明有$h\in H$使得$b^{-1} = ha^{-1}$，即$b = ah^{-1}\in aH$，于是$aH = bH$。这说明$f$是单射。至此我们建立了$H^{\text{左}}$到$H^{\text{右}}$的双射，即$H^{\text{左}}$和$H^{\text{右}}$等势。
+
+如果$G$是有限群，那么子群$H$对应的左往集个数等于右往集个数。这个数目作为等价类个数，是群势和子群势之比，我们把这个比记为
+$$ [G:H] = \frac{|G|}{|H|}. $$
+换句话说，子群的势整除群的势。这个结果称为\textbf{群势定理}。
+
+我们用一种新的方法衡量以上说的往左往右不一致的问题。对$x\in G$，我们把它往左乘$G$中元素$a$变为$ax$，再往右乘$a$的逆元，得到$axa^{-1}$，称为用$a$将$x$\textbf{往复}。如果$a,x$是一般的数，那么往复后还是$x$：
+$$ axa^{-1} = x.$$
+但很多时候，群元素不一定能交换，所以$axa^{-1}$会变成别的元素。
+用$a$将$x$往复后还得到$x$，当且仅当$ax = xa$。
+
+群元素$x\in G$往复得到的集合称为其\textbf{轨道}：
+$$ \mathcal{O}_x = \{ axa^{-1} \, \mid \, a\in G \}. $$
+其中元素是$x$往复得到的，称为其（往复）\textbf{同轨}。
+
+幺元$e$往复显然只会得到自己。所以$e$的轨道就是$\{e\}$，它没有同轨。
+
+我们在\ref{tm:g-80}中证明过：子群$H$的往复集还是子群，称为其往复群。这一点和左往集、右往集不同。子群的往集如果不是自己，就不是群，因为不包含幺元。
+\begin{pp}
+    子群$H\leq G$的往集如果不是$H$，就不是子群。
+\end{pp}
+\begin{proof}
+    考虑$H$的左往集$aH$。我们知道$H$和$aH$要么相等，要么不相交。设$H\neq aH$，则$H\cap aH = \varnothing$。反设$e\in aH$，则有$h\in H$使得$ah = e$。于是$a = h^{-1}\in H$，$a\in H\cap aH$，矛盾！因此$e\notin aH$。
+\end{proof}
+
+子群$H$的往复集虽然是子群，而且不难证明与$H$等势，但不一定是$H$自己。如果$H$的往复群是自己，那么会有更好的性质。
+
+\subsection{往合子群}
+设有群$G$。$G$的子集$H$如果满足：
+$$ \forall a\in G, \quad aH = Ha.$$
+即左往集总等于右往集，就说$H$在$G$中\textbf{往合}。如果$H$是$G$的子群，就说$H$是$G$的\textbf{往合子群}，记为$H \trianglelefteq G$。
+
+\begin{tm}[\textbf{往合的判定}]\label{tm:g-120}
+    子群$H$在$G$中往合，等价于说$H$往复后得到的都是自身，即它的往复群总是自己。
+\end{tm}
+\begin{proof}
+    设$H$在$G$中往合。$\forall \; a\,\in\,G$，考虑$h\in H$，则$ah\in aH = Ha$，即有$g\in H$使得$ah = ga$。于是$aha^{-1} = g\in H$。这说明$aHa^{-1}\subseteq H$。这个结论对任意$a\in G$成立，所以$a^{-1}Ha \subseteq H$。于是$\forall \;h\in H$，有
+    $$ a^{-1}ha\in H,\quad \mbox{因而}\; h = a(a^{-1}ha)a^{-1} \in aHa^{-1}. $$
+    这就说明$H\subseteq aHa^{-1}$，于是$H = aHa^{-1}$。$H$的往复群总是自己。
+
+    设$H$的往复群总是自己。$\forall \; a\,\in\,G$，$h\in H$，则$aha^{-1}\in H$，即有$g\in H$使得$aha^{-1} = g$。所以$ah = ga \in Ha$。这说明$aH \subseteq Ha$。反之，由于$a^{-1}ha\in H$，所以$\exists g\in H$使得$ha = ag$。于是又有$Ha\subseteq aH$。综合即有$aH = Ha$。
+
+\end{proof}
+
+从证明中可知，我们还可以把判定条件再放宽：
+\begin{tm}[\textbf{往合的判定}]\label{tm:g-121}
+    若$H\leq G$使得$\forall\; a\in G$，$aHa^{-1}\subseteq H$，那么$H$在$G$中往合。
+\end{tm}
+\begin{proof}
+    我们知道如果$\forall\; a\in G$，$aHa^{-1} = H$，那么$H$在$G$中往合。所以要证明的是$H\subseteq aHa^{-1}$。根据条件，$aHa^{-1}\subseteq H$对任意$a\in G$成立，所以$a^{-1}Ha \subseteq H$。于是$\forall \;h\in H$，有
+    $$ h = a(a^{-1}ha)a^{-1} \in aHa^{-1}. $$
+    这就说明$H\subseteq aHa^{-1}$。
+\end{proof}
+
+考虑群$G$的往合子群$H$中元素$x$的往复轨道。按照定义，$\forall a\in G$，$x$的同轨$axa^{-1}\in aHa^{-1} = H$。所以$x$的轨道$\mathcal{O}_x$完整地属于$H$。也就是说，$G$中任何元素要么不属于$H$，要么其整个轨道都属于$H$。从另一个角度来说，$H$就是由一条条完整的轨道组成的。而同轨关系是等价关系，所以$H$其实被划分为一条条轨道，既不重叠，也无遗漏。反之，把若干条轨道拼起来构成的子集$S$，只要是子群，那么由于其中元素的同轨都在$S$中，因而必然有$aSa^{-1}\subseteq S$，即$S$在$G$中往合。
+\begin{pp}
+    子群$H$在$G$中往合，当且仅当它是完整轨道的并集\footnote{注意这里的前提为$H$是子群。轨道的并集不一定是子群。}。
+\end{pp}
+
+若$H$在$G$中往合，则$H$除$G$的左商集和右商集是同一个集合，统称商集。
+\begin{tm}[\textbf{往合与商群}]
+    若$H$在$G$中往合，$H$除$G$的商集构成群，称为用$H$除$G$的\textbf{商群}，记为$\quotient{G}{H}$。我们定义使得商集为群的子群是\textbf{藏}，则往合子群是藏，也称为\textbf{藏群}。
+\end{tm}
+\begin{proof}
+    记$H$除$G$的商集为：
+    $$ S = \; \{xH\,\mid\, x\in G\}.$$
+    验证$S$关于以下运算构成群：
+    \begin{align*}
+        \phi \; : \quad S\times S\quad &\longrightarrow \quad S \\
+        (aH,\; bH) \; &\longmapsto \; (ab)H
+    \end{align*}
+    首先证明$\phi$的定义自洽，即如果$aH = a'H$，$bH = b'H$，则$(ab)H = (a'b')H$。$aH = a'H$，$bH = b'H$，说明有$h_a, h_b\in H$使得$a' = ah_a, \;\;b' = bh_b$。于是$a'b' = ah_abh_b$。$h_ab \in Hb = bH$，所以有$h\in H$使得$h_ab = bh$。于是$a'b' = ah_abh_b = abhh_b\in (ab)H$。同理可得$ab\in (a'b')H$。于是$(ab)H = (a'b')H$。
+
+    由于封闭性由定义自然得出，只需证明$\phi((aH)^{-1}, bH) \in S$。其中$(aH)^{-1}$是$aH$在$S$中关于$\phi$的逆元。按照定义有：
+    $$ \forall \; a\in G, \quad \phi(aH, \; eH) = (ae)H = aH, \quad \phi(eH, \; aH) = (ea)H = aH, $$
+    所以$H = eH$是幺元。而
+    $$ \forall \; a\in G, \quad  \phi(aH, \;a^{-1}H) = (aa^{-1})H = H, \quad \phi(a^{-1}H, \;aH) = (a^{-1}a)H = H, $$
+    所以$aH$有逆元$a^{-1}H$。于是$\phi((aH)^{-1}, bH) = (a^{-1}b)H \in S$。这就说明$S$关于$\phi$构成群。
+\end{proof}
+
+反之，如果$H$除$G$的左商集和右商集重合，那么也可以推出往合性质。
+\begin{tm}
+    若$H\leq G$的左商集和右商集是同一个集合，则$H$在$G$中往合。
+\end{tm}
+\begin{proof}
+    如果左商集和右商集是同一个集合，那么对任意$a\in G$，都有$b\in G$使得$aH = Hb$。也就是说$a\in aH = Hb$。这会导致$a\in Hb\cap Ha$，即$Ha$和$Hb$交集非空。这说明$Ha = Hb$，从而$aH = Hb = Ha$。这就说明$H$在$G$中往合。
+\end{proof}
+
+\begin{tm}[\textbf{群同态基本定理}]
+    设$\varphi : \; G \mapsto G'$为群同态，则其核$\Ker \varphi$是$G$的往合子群，其像$\Img \varphi$是$G'$的子群，且同构于$\Ker \varphi$除$G$的商群：
+    $$ \quotient{G}{\qquad\Ker \varphi} \cong \Img \varphi. $$
+    反之，如果子群$H$在$G$中往合，则$H$是某个群同态的核。
+\end{tm}
+\begin{proof}
+    $\forall \; a\,\in\,G$，考虑$x\in \Ker\varphi$，计算$axa^{-1}$经过$\varphi$的像：
+    $$ \varphi(axa^{-1}) = \varphi(a)\varphi(x)\varphi(a^{-1}) = \varphi(a)e'\varphi(a)^{-1} = \varphi(a)\varphi(a)^{-1} = e'.$$
+    其中$e'$是$G'$的幺元。这说明$axa^{-1}\in\Ker\varphi$。因此$a(\Ker\varphi)a^{-1}\subseteq \Ker\varphi$。而同理可推出$a^{-1}xa\in\Ker\varphi$，即$x\in a(\Ker\varphi)a^{-1}$，于是$a(\Ker\varphi)a^{-1}\subseteq\Ker\varphi$。
+    综上即有
+    $$\forall \; a\,\in\,G,\quad \Ker\varphi = a(\Ker\varphi)a^{-1}.$$
+    因此根据定理\ref{tm:g-120}，$\Ker \varphi$在$G$中往合。
+
+    考虑映射：
+    \begin{align*}
+        \phi \; : \; \quotient{G}{\qquad\Ker \varphi} \; &\longrightarrow \; \Img \varphi \\
+        x\Ker \varphi \; &\longmapsto \; \varphi(x)
+    \end{align*}
+    首先验证它是自洽的。若$x\Ker \varphi = y\Ker \varphi$，说明有$a\in \Ker \varphi$使得$x = ya$。于是：
+    $$ \varphi(x) = \varphi(ya) = \varphi(y)\varphi(a) = \varphi(y)e' = \varphi(y). $$
+
+    接着验证$\phi$是群同态。$\forall \; x, y\,\in\,G$，按商群的运算法则，
+    $$(x\Ker \varphi)(y\Ker \varphi) = (xy)\Ker \varphi, $$
+    于是：
+    \begin{align*}
+        \phi((x\Ker \varphi)(y\Ker \varphi)) &= \phi((xy)\Ker \varphi) = \varphi(xy) = \varphi(x)\varphi(y) \\
+        &= \phi(x\Ker \varphi)\phi(y\Ker \varphi).
+    \end{align*}
+
+    然后说明$\phi$是双射，因而是群同构。若$\phi(x\Ker \varphi) = \phi(y\Ker \varphi)$，即$\varphi(x) = \varphi(y)$。但$\varphi$是群同态。根据$G$中互反律总有$b\in G$使得$x = yb$，则$\varphi(x) = \varphi(y)\varphi(b) = \varphi(x)\varphi(b)$。因此$\varphi(b) = e'$，即$b\in \Ker \varphi$。这说明$x\in y\Ker \varphi$。同理$y\in x\Ker \varphi$。于是$x\Ker \varphi = y\Ker \varphi$。这说明$\phi$是单射。另一方面当$x$遍历$G$时$\phi$显然遍历$\Img \varphi$。因此$\phi$是满射。综合可知$\phi$是双射，因而是群同构。
+
+    反之，如果$H$在$G$中往合，考虑$G$到$H$除$G$的商群$\quotient{G}{H}$的映射：
+    \begin{align*}
+        \psi \; : \; G \; &\longrightarrow \; \quotient{G}{H}  \\
+        a \; &\longmapsto \; aH
+    \end{align*}
+    $\psi$是群同态：
+    \begin{align*}
+        \psi(ab) = (ab)H = (aH)(bH) = \psi(a)\psi(b).
+    \end{align*}
+    且显然是满同态。它的核由使得$\psi(a)$为商群的幺元$H$的群元素$a$构成。这要求$aH = H$，也就是$a\in H$。另一方面，$\forall \; a\,\in\,H$，$\psi(a) = aH = H$。综上可知，$H$就是群同态$\psi$的核。
+\end{proof}
+
+再次来看循环群$\langle a\rangle$的例子。考虑之前的群同态$f:\;n\mapsto a^n$，它要么是同构，要么其核为$m\mathbb{Z}$形式。后一种情况下，由于$f$是满同态，所以$\Img f = \langle a\rangle$，于是根据群同态基本定理，$\langle a\rangle$同构于$m\mathbb{Z}$除$\mathbb{Z}$的商群：
+$$ \langle a\rangle \;\cong\; \quotient{\mathbb{Z}}{m\mathbb{Z}}. $$
+商群$\quotient{\mathbb{Z}}{m\mathbb{Z}}$是什么呢？它就是模$m$的同余类构成的加法群。也就是说，
+$$ \langle a\rangle = \left\{ e, a, a^2, \cdots, a^{m-1} \right\} \;\cong\; \left\{ \overline{0}, \overline{1}, \cdots, \overline{m-1} \right\}. $$
+循环群的运算规则和模$m$同余类的加法一样。
+
+\section{群作用}
+
+为了理解群，可以\textbf{观}群在集合$S$中的\textbf{相}。设有群$G$，说$G$在$X$上\textbf{显相}，即有映射：
+\begin{align*}
+    \Gamma: \quad G \times S \; \longrightarrow \; S
+\end{align*}
+使得：
+\begin{enumerate}[label=\arabic*.]
+    \item $\forall \; x \in S$，$\Gamma(e, x) = x.$
+    \item $\forall \; g, \, h \in G$，$\forall \; x \in S$，$\Gamma(g, \Gamma(h, x)) = \Gamma(gh, x).$
+\end{enumerate}
+$\Gamma$描绘了群中元素如何把$S$中元素变为$S$中另一个元素。$\Gamma$与群的乘法兼容，因此，我们通过$\Gamma$，观察$G$中元素怎样变动$S$中的元素，此谓$G$在$S$中的相。通过观相而获知$G$的性质。$\Gamma$称为\textbf{现映射}、\textbf{显映射}或\textbf{显现映射}。
+
+为了方便讨论，固定现映射$\Gamma$后，我们可以将$\Gamma(g, x)$简记为$g(x)$。称$g$\textbf{施于}$x$得到$g(x)$。这样记法下，我们会发现观相的性质和映射类似，比如我们可以写：
+$$ \forall \; g, \, h \in S, \;\; \forall \; x \in S,\quad g(h(x)) = (gh)(x).  $$
+实际上，$S$到$S$的双射的集合关于映射的复合构成群。观该群在$S$中的相，就是观察群元素作为$S$上的双射，如何变换$S$中的元素。
+
+对于$g\in G$，我们说它（通过现映射）在$S$中的相，就是$x\mapsto g(x)$这个映射。比如空元$e$的相是恒等映射。这是因为按照定义，空元$e$能让所有$x\in S$保持不变。这很合理，因为空元本来就不改变群中元素。但若有$e\neq g\in G$在$S$中的相也是恒等映射，就说明我们无法通过$S$观察$g$了，因为$g$根本不起波澜，不变动$S$中任何元素。我们说现映射$\Gamma$无法让$g$显相，或者说$\Gamma$对$g$\textbf{无效}（但我们不对空元这么说，因为空元本来就应该“无相”）。如果$G$中（除了空元以外）没有无法显相的元素，就说现映射（对所有群元素都）\textbf{有效}，群$G$在$S$上显现\textbf{实相}。否则就说$G$在$S$上未显现实相，现映射对某些元素无效。
+
+不过，现映射让$g$在$S$中显相，不表示$g$能让$S$中所有元素都“动起来”。如果$g\in G$施于$x$必然得到另一个元素（$g(x)\neq x$，$g$没有不动点），那么就说$g$\textbf{无定}。如果现映射能让所有的$g\neq e$都无定，就说它\textbf{有为}，群$G$在$S$上显现\textbf{明相}或\textbf{无定相}。有为必然有效，反之不然。明相必然是实相，反之不然。
+
+另一方面，我们可以这样衡量现映射的效果：如果$\forall x, y \in S$，总有$g\in G$使得$g(x) = y$，就说现映射\textbf{贯通}（用$G$贯通$S$），能让$S$中任意两点贯通，$G$在$S$上显现\textbf{通相}。而如果这样的$g$是唯一的，就说现映射\textbf{有德}，$G$在$S$上显现\textbf{正相}或\textbf{真相}。这时群元素和集合元素得到完美恰当的匹配。现映射有德，当且仅当它有为且贯通。
+
+我们说$G$在$x\in S$上显现的\textbf{轨迹}为：
+$$ \mathcal{O}_G(x) = \{g(x) \, \mid \, g\in G\}.$$
+可以验证，“属于同轨迹”是$S$中的等价关系，不同的轨迹为等价类，称为\textbf{同轨类}。$G$贯通$S$，则只有一条轨迹。
+
+$U\subseteq S$\textbf{经过}$\boldsymbol{G}$\textbf{不变}，指：
+$$ G(U) := \{g(x) \, \mid \, g\in G,\, x\in U\} = U. $$
+每条轨迹作为子集，都经过$G$不变，且被$G$贯通。反之，经过$G$不变的子集必然可以划分为轨迹的不交并集。某个元素$x\in S$如果经过$G$不变，就称为（某个显现映射下）$\boldsymbol{G}$\textbf{定元}。它构成单个元素的轨迹，也就是一个定点。$G$定元的集合称为$S$中的$\boldsymbol{G}$\textbf{定集}。
+
+如果$g(x) = x$，就说$x$是$g$的\textbf{不动点}，也称$g$\textbf{定元}。给定$x$，使得$g(x) = x$的$g\in G$构成$G$的子群：
+$$ G_x = \{g\in G \, \mid \, g(x)= x\}, $$
+$G_x$称为$\boldsymbol{x}$\textbf{的定子群}或\textbf{定}$\boldsymbol{x}$\textbf{子群}。群$G$有为，则$S$中任何元素的定子群都是$\{e\}$。
+
+注意到
+$$ g(x) = h(x) \; \Leftrightarrow \; \left(g^{-1}h\right) (x) = x \; \Leftrightarrow \; g^{-1}h \in G_x \; \Leftrightarrow \; h \in gG_x. $$
+也就是说，$G$中两个元素施于$x$现同相，当且仅当两者属于$G_x$的同一个往集。于是$x$的定子群$G_x$的往集和$x$的轨迹$\mathcal{O}_G(x)$有双射：
+$$ \{aG_x\,\mid\,a\in G\}\; \longrightarrow \; \mathcal{O}_G(x). $$
+这个结论叫做\textbf{轨定定理}。
+
+\begin{et}
+    我们可以从另一个角度来看往复形成的轨道。考虑往复映射：
+    \begin{align*}
+        \mathit{o} \; : \; G \times G \; &\longrightarrow \quad G \\
+        (a,\;\;x) \;&\longmapsto \; axa^{-1}.
+    \end{align*}
+    以此观$G$于自身，则$x\in G$的轨道就是$G$在$x$上显现的轨迹：$\mathcal{O}_G(x)$。也就是说，
+    群元素的轨道，就是以往复映射$\mathit{o}$观群自身时的轨迹。群元素的往复同轨就是以往复观群自身时的同轨。因此按照轨迹的性质，往复同轨是群的等价关系，形成的等价类也称为（往复）\textbf{同轨类}。
+\end{et}
+
+如果$G$是有限群，$S$也是有限集合，我们可以想象$G$把$S$划分成轨迹的不交并。我们用两种方法累计以下集合的元素：
+$$ A = \{(g, \,x) \, \mid \,g\in G, x\in S, g(x)= x\}. $$
+对每个$x\in S$，考虑使得$g(x) = x$的所有$g\in G$构成的集合，其势记为$|G_x|$，则
+$$ |A| = \sum_{x\in S} |G_x|. $$
+另一方面，对任意$g\in G$，考虑使得$g(x) = x$的所有$x\in S$构成的集合，其势记为$|S^g|$，则
+$$ |A| = \sum_{g\in G} |S^g|. \qquad S^g = \{x\in S \, \mid \, g(x) = x\}.$$
+从轨定定理得知，
+$$ \forall x\in S, \quad |\mathcal{O}_G(x)| = \frac{|G|}{|G_x|},$$
+所以，
+$$ \sum_{g\in G} |S^g| = |A| = \sum_{x\in S} |G_x| = \sum_{x\in S} \frac{|G|}{|\mathcal{O}_G(x)|}. $$
+\begin{align*}
+    \sum_{g\in G} |S^g| &= |A| = \sum_{x\in S} |G_x| = \sum_{x\in S} \frac{|G|}{|\mathcal{O}_G(x)|} \\
+    \sum_{x\in S} \frac{1}{|\mathcal{O}_G(x)|} & = \frac{1}{|G|} \sum_{g\in G} |S^g|.
+\end{align*}
+考虑左边的求和式，把$S$中元素按轨迹分类，同一个轨迹中的元素$x,y$，$\mathcal{O}_G(x) = \mathcal{O}_G(y)$。因此，考虑$S$被$G$分成的各个轨迹。对一个轨迹中的所有元素求和，得到的结果是$1$。于是对所有轨迹的所有元素求和，得到的是$S$被$G$分成的总轨迹数，记为$\left|\quotient{X}{G}\right|$。于是：
+$$ \left|\quotient{X}{G}\right| = \frac{1}{|G|} \sum_{g\in G} |S^g|. $$
+这个结果称为\textbf{定元分轨定理}：
+\begin{tm}[\textbf{定元分轨定理}]\label{tm:g-130}
+    观$G$于$S$。$S$被$G$划分的轨道数，是$G$中各元素在$S$中的定元数的平均数。
+\end{tm}
+
+\begin{et}
+如果$|G| = p^n$，其中$p$是素数，$n$是正整数。考虑观$G$于有限集合$X$。考虑$x\in X$的定子群$G_x$和轨迹$\mathcal{O}_G(x)$，轨定定理说明：
+$$
+    |G| = |G_x| \cdot |\mathcal{O}_G(x)|.
+$$
+$G$在$X$中的轨迹将$X$分划为同轨类的不交并。在这些同轨类里各选一个代表元构成集合，记为$\mathcal{O}_G(X)$，则：
+$$
+    |X| = \sum_{x\in \mathcal{O}_G(X)} |\mathcal{O}_G(x)| =  \sum_{x\in \mathcal{O}_G(X)\atop |\mathcal{O}_G(x)| = 1} |\mathcal{O}_G(x)| +  \sum_{x\in \mathcal{O}_G(X)\atop |\mathcal{O}_G(x)| > 1} |\mathcal{O}_G(x)| = |D_G(X)| + \sum_{x\in \mathcal{O}_G(X)\atop |\mathcal{O}_G(x)| > 1} \frac{|G|}{|G_x|}.
+$$
+其中$D_G(X)$是轨迹长度为$1$的元素的集合。$G_x$作为子群，群势定理说明其阶是$p^n$的因数，因此总是$p$的乘方，于是轨迹长度作为$|G|$除以$|G_x|$的商还是$p$的乘方，要么是$1$，要么是$p$的乘方。而轨道长度等于$1$的元素被归入了$D_G(X)$，所以剩下的都是$p$的倍数。于是
+$$
+  |X| \tong{p} |D_G(X)| + \sum_{x\in \mathcal{O}_G(X)\atop |\mathcal{O}_G(x)| > 1} \frac{|G|}{|G_x|} \tong{p} |D_G(X)|.
+$$
+也就是说，$X$的元素个数同余于群相中定元的个数。
+\end{et}
+
+\section{群的中心和交往群}
+
+设有群$G$。$G$的元素$c$如果满足：
+$$ \forall g\in G, \quad gc = cg.$$
+就说$c$是$G$的\textbf{心元}。心元可以理解为往复总是自己的元素。其轨道只包含自己，长度为$1$。所有心元的集合称为$G$的\textbf{中心}，记为$G^{\text{心}}$：
+$$ G^{\text{心}} = \{z\in G \, \mid \, \forall g\in G, \; zg = gz\}.$$
+
+\begin{tm}[\textbf{中心是群}]\label{tm:g-150}
+    群$G$的中心总是其子群，称为\textbf{心群}。
+\end{tm}
+\begin{proof}
+    显然$e\;\in\,G^{\text{心}}$。而且$\forall \; z \,\in\, G^{\text{心}}$，$\forall\; a\,\in\, G$，
+    $$ az = za \; \Rightarrow \;az^{-1} = z^{-1}zaz^{-1} = z^{-1}azz^{-1} = z^{-1}a. $$
+    因此$z^{-1}\in G^{\text{心}}$。于是$\forall \; x, y,\,\in\, G^{\text{心}}$，$\forall\; a\,\in\, G$，
+    $$ ax^{-1}y = x^{-1}ay = x^{-1}ya. $$
+    这说明$x^{-1}y \,\in \, G^{\text{心}}$，按照定理\ref{tm:g-70}，$G^{\text{心}}$是子群。
+\end{proof}
+
+既然每个心元都是独立的轨道，$G^{\text{心}}$作为由心元组成的子群，自然在$G$中往合，从而可以定义商群。我们说$G$的中心是$G$的藏群，也称\textbf{心藏}。
+
+\begin{df}
+    设$S$是$G$的子集。$S$的\textbf{交心集}$C_G(S)$是$G$中所有与$S$中任何元素都交换的元素的集合
+    $$ C_G(S) = \{g\in G \, \mid \, \forall s\in S, \; sg = gs\}. $$
+\end{df}
+
+\begin{tm}[\textbf{交心集是群}]\label{tm:g-160}
+    群$G$的任何子集$S$的交心集必然是$G$的子群，也叫\textbf{交心群}。
+\end{tm}
+\begin{proof}
+    显然$e\in C_G(S)$。其次，$\forall \; x, y\,\in\, C_G(S)$，$\forall\; s\,\in\, S$，按定义：
+    \begin{align*}
+        sx^{-1} &= esx^{-1} = x^{-1}xsx^{-1} = x^{-1}sxx^{-1} = x^{-1}s. \\
+        sx^{-1}y &= x^{-1}sy = x^{-1}ys.
+    \end{align*}
+    即$x^{-1}y \,\in \, C_G(S)$。于是按照定理\ref{tm:g-70}，$C_G(S)$是子群。
+\end{proof}
+
+交心群可以视为心群的弱化版。即不要求和整个群交换，只和其中一部分（$S$）交换。群$G$的交心集就是和整个群都交换的元素的集合，也就是其中心。
+
+$S$的交心集不一定包括$S$，因为$S$中元素未必与其他元素都交换。如果$S$中任何两个元素都交换，就说$S$交心，其交心集包括$S$。如果$S$是交换群，那么不仅其交心群包括它，而且它在其中往合。
+\begin{tm}
+    若子群$H\leq G$是交换群，则它在其交心群中往合，是其中心的子群。
+\end{tm}
+\begin{proof}
+    首先证明$H \leq C_G(H)$。由于$H$是交换群，$\forall x, y\in H$，$xy = yx$。这说明$x\in C_G(H)$。于是$H\subseteq C_G(H)$，$H\leq C_G(H)$。
+
+    再证明$H$在$C_G(H)$中往合。$\forall x\in C_G(H)$，按定义$\forall h\in H$，$xh = hx$。因此$xH = Hx$。即是说$H$在$C_G(H)$中往合。不仅如此，由于$H$中任何元素都和$C_G(H)$中所有元素交换，因此必然是$C_G(H)$的心元。这说明$H$是$C_G(H)$的心群的子群。
+\end{proof}
+
+\begin{df}
+    设$S$是$G$的子集，$S$的\textbf{交往集}$\text{合}_G(S)$是：
+    $$ \text{合}_G(S) = \{g\in G \, \mid \, gS = Sg\}.  $$
+\end{df}
+
+\begin{tm}[\textbf{交往集是群}]
+    $S$的交往集必然是$G$的子群，也称\textbf{交往群}。
+\end{tm}
+\begin{proof}
+    显然$e\in \text{合}_G(S)$。其次，$\forall \; x, y\,\in\, \text{合}_G(S)$，集合$(xy)S$即为$x(yS)$，从而等于$x(Sy)$，即为$(xS)y$。而$(xS)y = (Sx)y = S(xy)$。总结：
+    $$ (xy)S = S(xy),\quad \mbox{即}\; xy\in \text{合}_G(S). $$
+
+    另一方面，$x \in S$说明有$s,t\in S$使得：
+    $$ xs = tx. $$
+    于是
+    $$ x^{-1}t = sx^{-1}.\quad \mbox{即}\; x^{-1}\in \text{合}_G(S). $$
+    于是$x^{-1}y\in \text{合}_G(S)$。按照定理\ref{tm:g-70}，$\text{合}_G(S)$是子群。
+\end{proof}
+
+一般集合$S$的交往集不一定包括$S$，因为$S$不一定是子群，对群运算不封闭。换做子群$H$，情况就不同了。首先，若$x\in H$，则$xH = H = Hx$。所以$x\in\text{合}_G(H)$。也就是说，$H\subseteq\text{合}_G(H)$，$H\leq\text{合}_G(H)$。不仅如此，只要$x\in \text{合}_G(H)$，那么按定义$xH = Hx$。这说明$H$在$\text{合}_G(H)$中往合。
+\begin{pp}
+    若$H \leq G$，则$H$是其交往群的往合子群。
+\end{pp}
+换句话说，交往群就是按“$H$在其中往合”这个标准来收集群元素的。所以，只要$H$在$G$的某个子群$K$中往合，那么$\forall x\in K$，$xH = Hx$。于是$x\in \text{合}_G(H)$，也就是说$K\subseteq \text{合}_G(H)$，$K\leq \text{合}_G(H)$。换句话说，在所有使$H$在其中往合的群里，$\text{合}_G(H)$是“最大的”。其他令$H$在其中往合的群都是其子群。如果$H$在$G$中往合，那么其交往群就是$G$。
+
+交心群和交往群都是从集合出发构造子群的手段。对比交心群和交往群，交心群的要求更严格，交往群的要求更宽松。任何集合的交心群总是交往群的子群。而把单个元素视为集合的话，其交心群就是其交往群。
+
+\begin{pp}[\textbf{交心和交往}]
+    任意集合$S$的交心群在其交往群中往合。
+\end{pp}
+\begin{proof}
+    设有$S\subseteq G$。给定$x\in C_G(S)$，按定义$\forall s\in S, xs = sx$，所以$xS = Sx$，因此$x\in \text{合}_G(S)$。这说明$C_G(S)\subseteq \text{合}_G(S)$。我们知道两者都是子群，因此$C_G(S)\leq \text{合}_G(S)$。
+
+    对任意$x\in \text{合}_G(S)$，我们希望证明$xC_G(S)x^{-1} \subseteq C_G(S)$。换句话说，我们希望证明$\forall\;c\in C_G(S)$，$xcx^{-1} \in C_G(S)$。按照$C_G(S)$的定义，就是要证明：
+    $$ \forall c \in C_G(S), \forall s \in S, xcx^{-1}s = sxcx^{-1}. $$
+
+    回到$x$的定义，由于$x\in \text{合}_G(S)$，$xS = Sx$，因此：
+    $$\forall s\in S, \exists t \in S, sx = xt $$
+
+    然而，由于$c\in C_G(S)$，$t\in S$，所以$tc = ct$。于是推出：
+    \begin{align*}
+        sxc = xtc = x(tc) &= x(ct) = xcx^{-1}xt = xcx^{-1}sx, \\
+        s\left(xcx^{-1}\right) = (sxc)x^{-1} &= xcx^{-1}sxx^{-1} = \left(xcx^{-1}\right)s.
+    \end{align*}
+    这就证明了结论。
+\end{proof}
+
+为了方便记忆，我们有如下口诀：
+
+\vspace{16pt}
+{\Large 藏，往复自合也。心，交换自如也。群心为藏、为群，曰心藏、心群。交心为群，往合亦为群。交心为往合之藏。}
+
+\vspace{16pt}
+
+考虑用往复映射将群$G$显现于$G$自身：
+\begin{align*}
+    G \times G \; & \longrightarrow \; G \\
+    (g, \;x) \; &\mapsto \; gxg^{-1}
+\end{align*}
+观得$x\in G$的轨迹$G(x)$即为其轨道，因此将$G$分划为多个同轨类。也就是说，如果$G$是有限群，那么其势为所有轨道长度之和。
+$$
+    |G| = \sum_{x\in \mathcal{O}(G)} |\mathcal{O}_x|.
+$$
+其中$\mathcal{O}(G)$是从每个同轨类中抽一个代表元得到的集合，也可以看作同轨类的集合。
+
+继续讨论其中长度为$1$的轨道。轨道长度是$1$，说明对应的群元素$x$往复后总是自己：
+$$\forall \; g\in G, \quad gxg^{-1} = x.$$
+这说明$x$就是心元。因此，我们可以按长度将轨道分为两类：轨道长度为$1$的为一类，轨道长度大于$1$的为另一类。而按照我们讨论的结果，前一类群元素的个数就是心群的势：
+\begin{align*}
+    |G| &= \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| = 1} |\mathcal{O}_x| + \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} |\mathcal{O}_x| \\
+    &= \big|\{x \in \mathcal{O}(G) \, \mid \, |\mathcal{O}_x| = 1\}\big| + \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} |\mathcal{O}_x| =  \big|\{x \in G \, \mid \, |\mathcal{O}_x| = 1\}\big| + \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} |\mathcal{O}_x| \\
+    &= |G^{\text{心}}| + \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} |\mathcal{O}_x|.
+\end{align*}
+另一方面，有限群里，某个元素所属的轨道长度乘以其交心群的势得到群势。因此：
+$$
+    |G| = |G^{\text{心}}| + \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} \frac{|G|}{|C_G(x)|}.
+$$
+我们把以上等式称为轨类长公式，它给出了同轨类长度和群势的关系。
+
+\begin{et}
+    如果$|G| = p^n$，其中$p$是素数，$n$是正整数。那么按照轨类长公式得到：
+$$
+    p^n = |G| = |G^{\text{心}}| + \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} \frac{|G|}{|C_G(x)|}.
+$$
+而根据群势定理，$C_G(x)$作为子群，其势为$|G|$的因数，因此总是$p$的乘方，于是$x$的轨道长度作为$|G|$除以$|C_G(x)|$的商还是$p$的乘方，要么是$1$，要么是$p$的乘方。而轨道长度等于$1$的元素被归入了心群，于是剩余轨道长度都是$p$的乘方，也就是$p$的倍数。因此，
+$$
+  |G^{\text{心}}| \tong{p} p^n - \sum_{x\in \mathcal{O}(G)\atop |\mathcal{O}_x| > 1} \frac{|G|}{|C_G(x)|} \tong{p} 0.
+$$
+也就是说，$G$的中心群势为$p$的倍数。
+\end{et}
+
+
+
+\subsection{Sylow定理} % TODO
+
+
+\end{document}

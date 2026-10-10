@@ -1,4 +1,5 @@
 % 代数部分
+\usetikzlibrary{calc}
 
 % 像空间
 \newcommand\Img[0]{
@@ -35,6 +36,61 @@
 }
 
 % 商结构：两个代数结构的商结构
-\newcommand\quotient[2]{
-    \mathop{\raisebox{0.65ex}{$#1$}$\mkern-5mu\diagup\mkern-7mu$\raisebox{-0.7ex}{$#2$}}
+
+% ================= 可调参数（在导言区修改） =================
+% 斜线与水平线的夹角（单位：度），默认 30 度
+\newcommand{\quotientangle}{30}
+% 斜线的总长度，默认 1.2em（可改为其他长度，如 1.5em、2ex 等）
+\newcommand{\quotientlength}{2em}
+% G 相对于斜线起点的水平偏移（负值向左移动），默认 -0.15em
+\newcommand{\quotientGxshift}{-0.5em}
+% G 相对于斜线起点的垂直偏移（正值向上移动），默认 0.2em
+\newcommand{\quotientGyshift}{0.5em}
+% H 相对于斜线终点的水平偏移（正值向右移动），默认 0.15em
+\newcommand{\quotientHxshift}{0.5em}
+% H 相对于斜线终点的垂直偏移（负值向下移动），默认 -0.2em
+\newcommand{\quotientHyshift}{-0.5em}
+% 斜线的线宽，默认使用当前 TikZ 线宽（\pgflinewidth）
+% 如需加粗，可改为例如 0.8pt 或 1pt
+\newcommand{\quotientlinewidth}{\pgflinewidth}
+\newcommand{\quotientvshift}{0pt}
+% =============================================================
+
+% 商群命令：\quotient{G}{H}
+% 在数学模式中使用，例如 $\quotient{G}{H}$
+\newcommand{\quotient}[2]{%
+  \mathord{% 保证作为普通数学符号的间距
+    \tikz[baseline={([yshift=-\the\fontdimen22\textfont2 + \quotientvshift] mid)}]{
+      % 定义斜线中点，位于坐标原点，作为对齐基准
+      \coordinate (mid) at (0,0);
+      % 计算斜线起点和终点（极坐标，关于中点对称）
+      \coordinate (start) at ({180+\quotientangle}:{0.5*\quotientlength});
+      \coordinate (end) at ({\quotientangle}:{0.5*\quotientlength});
+      % 绘制斜线
+      \draw[line width=\quotientlinewidth] (start) -- (end);
+      % 放置 G，位置相对于中点偏移（默认在左上方）
+      \node[inner sep=0pt] at ($(mid)+(\quotientGxshift,\quotientGyshift)$) {$#1$};
+      % 放置 H，位置相对于中点偏移（默认在右下方）
+      \node[inner sep=0pt] at ($(mid)+(\quotientHxshift,\quotientHyshift)$) {$#2$};
+    }%
+  }%
 }
+
+% 子群
+\newcommand{\subg}{    
+    \mathord{
+        \tikz[baseline=0pt, trim left=-0.2em, trim right=0.8em] \draw (0,.35em) -- (.45em,0.6em) -- (.45em,0.1em)  -- cycle;
+    }}
+\newcommand{\subgeq}{    
+    \mathord{
+        \tikz[baseline=0pt, trim left=-0.2em, trim right=0.8em] \draw (0,.35em) -- (.45em,0.6em) -- (.45em,0.1em)  -- cycle (0,.0em) -- (0.5em,.0em);
+    }}
+% 正规子群
+\newcommand{\nsg}{    
+    \mathord{
+        \tikz[baseline=0pt, trim left=-0.2em, trim right=0.8em] \draw (0,.35em) -- (.45em,0.6em) -- (.45em,0.1em)  -- cycle (0,.35em) -- (0.45em,.35em);
+    }}
+\newcommand{\nsgeq}{    
+    \mathord{
+        \tikz[baseline=0pt, trim left=-0.2em, trim right=0.8em] \draw (0,.35em) -- (.45em,0.6em) -- (.45em,0.1em)  -- cycle (0,.35em) -- (0.45em,.35em) (0,.0em) -- (0.5em,.0em);
+    }}
