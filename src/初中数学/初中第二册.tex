@@ -1914,14 +1914,14 @@ $\triangle MOB$、$\triangle MOA$都是等腰三角形。
 一般的情况下，总有自然数$r < n$和整数$q$，使得：
 $$ m = nq + r.$$
 这就是整数的带余除法。我们说$r$是$m$除以$n$得到的余数，$m$和$r$模$n$同余，记作：
-$$ m \equiv r \mod n.$$
+$$ m \tong{n} r \quad \mbox{或} \quad m \equiv r \modu{n}.$$
 
 一般来说，两个整数$a$和$b$相差$n$的倍数，就说它们模$n$同余。比如$4$和$9$模$5$同余。
 给定整数$n$，任何两个整数要么模$n$同余，要么模$n$不同余，而且：
 \begin{enumerate}
-    \item $\forall a \in \mathbb{Z}, \quad a \equiv a \mod n.$
-    \item $a \equiv b \mod n$，当且仅当$b \equiv a \mod n.$
-    \item 如果$a \equiv b \mod n$且$b \equiv c \mod n$，那么$a \equiv c \mod n.$
+    \item $\forall a \in \mathbb{Z}, \quad a \equiv a \modu{n}.$
+    \item $a \equiv b \modu{n}$，当且仅当$b \equiv a \modu{n}.$
+    \item 如果$a \equiv b \modu{n}$且$b \equiv c \modu{n}$，那么$a \equiv c \modu{n}.$
 \end{enumerate}
 所有模$n$同余的整数的集合称为模$n$的\textbf{同余类}。比如，所有除以$5$余$1$的整数的集合就是一个模$5$的同余类。
 同样地，除以$5$余$0$、$2$、$3$、$4$的整数的集合各是模$5$的同余类。模$5$的同余类一共有$5$个。一般来说，
